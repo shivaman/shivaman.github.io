@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Event Driven Infrastructure - DevOpsDays Melb 2015</title>
+
+		<meta name="description" content="Event Driven Infrastructure - A talk for DevOpsDays, created with reveal.js">
+		<meta name="author" content="Shiva N">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/devopsdays.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Event Driven Infrastructure</h2>
+					<p>
+						<small>Shiva N / <a href="http://twitter.com/shivamaan">@shivamaan</a> </small><br>
+						<img align="middle" class="noborders" src="images/amazon-web-services.jpg" width="200">
+					</p>
+					<aside class="notes">
+					<ul>
+					<li>
+						With some of the  exciting technologies and innovation happening in the world of public cloud, a lot of our ideas about the underlying infrastructure components, and processes surrounding them are falling apart. For probably the first time, infrastructure is able to keep up with software architecture and development practices. With on-demand, just-in-time computing resources, we are still discovering the possibilities.
+					</li><li>
+						My intention is for you to take away from this talk, to varying degrees, and in multiple contexts, ideas around how architectures are evolving that have an impact on how we develop and operate the platforms.
+					</li><li>
+						Warning : Lot of architecture diagrams, AWS jargon, and some wild ideas that are not based on reality.  
+					</li></ul>	
+					</aside>
+				</section>
+ 				
+ 				<section>
+					<section>
+						<img src="images/GoogleWiki.png" alt="Event Driven Architecture" width="600">
+					</section>
+					<section>
+						<h4>A banana warehouse at the zoo</h4>	
+						<img class="noborders" src="images/lottabananas.jpg" width="600">
+						<aside class="notes">
+							Let us consider a banana warehouse attached to a zoo.
+							[Photo Credit] http://www.collegeslackers.com/pictures/lots_of_bananas [/Photo Credit]
+						</aside>				
+					</section>
+					<section >
+						<table><tr>
+						<td><img class="noborders" src="images/clock.jpg" width="100"></td>
+						<td>
+							<h4>Run an banana inventory every hour</h4>
+							<aside class="notes">
+								In time based events, think cronjobs, the actors are specific systems that fire at certain times. They might start a chain of events, but they are tightly coupled, and based on time.
+							</aside>
+						</td>
+						</tr></table>
+					</section>
+					<section >
+						<table><tr>
+						<td><img class="noborders" src="images/monkey.png" width="100"></td>
+						<td>
+						
+							<h4>Give me five bananas</h4>
+							<aside class="notes">
+									Then there is the client-server type of interactions. Initiated by client, and usually only 2 actors, with possible chain of command. Mostly tightly coupled, and with multi threading and other technologies, some parallelism is achievable.
+							</aside>
+						
+						</td>
+						</tr></table>
+					</section>
+					<section>
+						<table><tr>
+						<td><img class="noborders" src="images/monkey.png" width="100"></td>
+						<td>
+							<h4>Monkey took five bananas</h4>							
+						</td>
+						</tr>
+						</table>
+						<div class="fragment" >
+						<img class="noborders" src="images/MonkeyEventConsumers.png" >
+						</div>
+						<aside class="notes">
+							Events are the primary drivers. Loosely coupled, and multiple systems can consume the same event in different contexts.
+							<ul>
+								<li> Run inventory</li>
+								<li> Plot monkey's banana consumption pattern </li>
+								<li> Analytics on monkey banana consumption across all zoos</li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+
+				<section>
+				
+					<section data-background="images/Annular_solar_eclipse_2012.jpg">
+						<h2> <span class="white">Event Driven Architecture </span></h2>
+						<aside class="notes">
+							[Photo Credit] http://www.hdwallsource.com/solar-eclipse-4934.html/solar-eclipse-4934 [/Photo Credit]
+						</aside>
+					</section>
+					<section >
+						<img src="images/EventDrivenArchitecture.png" alt="Event Driven Architecture" width="600">
+					</section>
+
+					<section data-background="images/f15.jpg">	
+	     				<h2>5 Characteristics</h2>
+	        			<ul>
+	          				<li class="fragment"> Real time (or near real time) </li>
+	          				<li class="fragment"> Push Notifications </li>
+	          				<li class="fragment"> One-way 'fire-and-forget' </li>
+	          				<li class="fragment"> Immediate action at event consumer
+	          				<li class="fragment"> Informational (“<span class="green">monkey took bananas</span>”) and not commands (“<span class="blue">perform banana inventory</span>”) </li>
+	        			</ul>
+	        			<aside class="notes">
+	        				<ul>
+	        					<li>Timeliness -  Systems publish events as they occur instead of storing them locally andwaiting for the processing cycle, such as a nightly batch cycle.</li>
+	        					<li> Broadcast Communications - Participating systems broadcast events to any interested party. More than one party can listen to the event and process it.</li>
+								<li>Asynchrony - The publishing system does not wait for the receiving system(s) to process the event(s).</li>
+								<li>Fine Grained Events - Applications tend to publish individual events as opposed to a single aggregated event. </li>
+	        				</ul>
+	        			</aside>
+          			</section>
+					<section>	
+	     				<h2>Why?</h2>
+	        			<ul>
+	          				<li class="fragment"> Decouple responsibilities </li>
+	          				<li class="fragment"> Communicate by triggering events </li>
+	          				<li class="fragment"> Scale out components horizontally </li>
+	          				<li class="fragment"> Higher responsiveness </li>
+	          				<li class="fragment"> High availability and resiliency </li>
+	        			</ul>
+	          		</section>        
+				</section>
+
+
+				
+				<section>
+	          		<section data-background="images/banner-support-infrastructure.jpg">
+		          		<div class="see-through">
+		          			<h2><span class="white">What about Infrastructure?</span></h2>
+		          			<aside class="notes">
+									You still need infrastrucure scaffolding to support traditional event driven architectures. 
+									<br>
+									[Photo Credit] http://ryanpanos.tumblr.com/post/56367554018/scalesofperception-scaffolding-by-various [/Photo Credit]
+							</aside>
+		          		</div>
+	          		</section>		
+					<section>
+						<h2> Automated Configuration Management </h2>
+						<ul class="fragment">
+							<li> Puppet </li>
+							<li> Chef </li>
+							<li> Ansible </li>
+							<li> Salt </li>
+							<li> etc... </li>
+						</ul>
+					</section>
+					<section>
+						<h2> Infrastructure as Code </h2>
+						<h3 class="fragment"> <span> AWS Cloudformation + Custom Resources = No Limits </span></h3>
+					</section>
+					<section>
+						<h2> Stackstorm </h2>
+						<aside class="notes">
+						<ul>
+							<li>Sensors - Inbound integrations (events)</li>
+							<li>Triggers - Contain information about a particular event</li>
+							<li>Actions - Outbound integrations</li>
+							<li>Workflows - Allow you to perform complex bussines logic</li>
+							<li>Rules - Wire together triggers and actions</li>
+							<li>Timers - Allow you to run action on a pre-defined time interval or on a specific date</li>
+						</ul>
+						</aside>
+					</section>
+					<section>
+						<h2> Homegrown tools/scripts </h2>
+					</section>
+					<section>
+						<h2> AWS Lambda </h2>
+						<h6 class="fragment"> <span> A whole new world...</span></h6>
+					</section>			
+					<section data-background="images/wall_of_lambda.jpg">
+					<span class="white">	
+						<table> <tr>
+	     					<td><h2><span class="white">What is AWS Lambda?</span></h2></td>
+	     					<td><img  class="noborders" src="images/CupofRobots.png" width="400" >	</td>
+	     				</tr></table>
+	     				<div class="see-through">
+	        			<ul>
+	        				<li> A zero-administration compute platform </li>
+	          				<li> Stored procedures for the cloud </li>
+	          				<li> Function-as-a-Service (NodeJS/Java) </li>
+	          				<li> Event driven from other services </li>
+	          				<li> …or triggered externally and even chained </li>
+	        			</ul>
+	        			</div>
+	        		</span>
+	        		<aside class="notes">
+	        			[Picture Credit] http://i.imgur.com/9WYZXfD.jpg [/Picture Credit]
+	        		</aside>
+	          		</section>   		
+				</section>
+
+				      
+				<section  data-transition="convex">
+					<section data-background="images/background.png">
+						<h2> <span class="white"> What events can your infrastructure react to ? </span></h2>
+						<img src="images/the_riddler.jpg" alt="The Riddler" height="500" width="400">
+						<aside class="notes">
+							[Photo Credit] http://www.deviantart.com/art/The-Riddler-322202821 [/Photo Credit]
+					</section>
+
+					<section>
+						<h3> Simple Event </h3>
+						<img src="images/SimpleEvent.png" alt="S3 put event processed by Lambda">
+						<aside class="notes">
+							<ul>
+								<li>Document processing. Users upload documents, and Lambda function automatically kicks off indexing job.</li>
+								<li>Data upload. Lambda function figures out if it is structured or unstructured data, and if it is former, uploads data into a Redshift cluster, and if it is latter, spins up an EMR cluster for processing.</li>
+								<li>[Pic Credit] http://docs.aws.amazon.com/lambda/latest/dg/images/s3-admin-iser-walkthrough-20.png [/Pic Credit]</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section>
+						<h3>  Spiky Load Events</h3>
+						<table><tr>
+						<td><img src="images/autoscaling.png" alt="Auto Scaling"></td>
+						<td>
+						<ul>
+							<li> Pre warming (Time)</li>
+	          				<li> Auto scaling (Metrics)</li>
+	          				<li> Feed forward loops (Predictive) </li>
+          				</ul>
+          				<aside class="notes">
+          					Predictive - Machine Learning, AML?
+          				</aside>
+          				</td>
+          				</tr></table>
+					</section>
+
+					<section>
+						<h3> Component Failure Event</h3>
+						<ul>
+	          				<li> EC2 Auto Healing  </li>
+	          				<li> Service discovery + Container recycling </li>
+	          				<li> SQS Design pattern  </li>
+          				</ul>
+          				<aside class="notes">
+          					SQS Design pattern - SQS message goes invisible for some time after consumer reads it. Consumer has to delete it specifically. Combine that with auto scaling based on queue depth, you have a self healing event processor.
+          				</aside>
+					</section>
+
+					<section>
+						<h3>  Disaster Event </h3>
+						<table><tr>
+							<td><img src="images/DRPilotLight1.png" alt="Pilot Light DR"></td>
+							<td><img src="images/DRPilotLight2.png" alt="Pilot Light DR"></td>
+						</tr></table>
+					</section>
+
+					<section>
+						<h3>  Security Events </h3>
+						<ul>
+	          				<li> DDoS attack </li>
+	          				<li> Instance compromise </li>
+	          			</ul>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li> Architecture that will absorb DDoS attempts and buy time to respond. Use CloudFront</li>
+	          					<li> Typical sequence on discovery of Instance compromise -: Discover -> Isolate -> Analyse -> Repair -> Replace. Instead have your IDS isolate the instance by changing the security group, automatically Replace the instance, and continue that loop, till the golden image (AMI) is Repaired.</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h3>  Streaming Events </h3>
+						<img src="images/wt-cloudtrail-100.png" alt="CloudTrail + Kinesis + Lambda + SNS">
+          				<aside class="notes">
+          					Also VPCFlowLogs -> Kinesis -> Lambda -> ElasticSearch cluster -> Kibana for dashboards 
+					</section>
+
+					<section>
+						<h3>  Complex Events </h3>
+						<ul>
+							<li> Intelligent build pipelines </li> 
+	          				<li> Event Observer Pattern </li>
+          				</ul>
+          				<aside class="notes">
+          					<ul>
+          						<li> Build pipelines which self regulate based on events in the pipeline. If an automated performance test in a CD pipeline produces sub optimal results, the pipeline will self regulate to add additional capacity. If a deployment fails because of an ICE event, the pipeline will try to use alternate instance types.</li>
+          						<li> Multiple events firing independantly write their individual context into a DynamoDB table. An Observer Lambda function watching Dynamo streams picks up patterns of events and acts on them</li>
+          					</ul>
+          				</aside>
+					</section>
+
+					<section>
+						<td><img src="images/Echo.png" alt="Auto Scaling"></td>
+					</section>
+					
+					<section>
+						<h3>  Sentient Events ?! </h3>
+						<aside class="notes">
+							Can an event be self aware as to its processing and infrastructure requirements? Can an event metadata have information about how it should be processed?
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section data-background="images/background.png">
+						<h2> <span class="white">How does this affect </span> <span class="yellow">"the DevOps"? </span></h2>
+						<img src="images/DevOpsDays-BluesBrothers-B.jpg" alt="Blues Brothers" height="500" width="500">
+						<aside class="notes"> [Photo Credit] http://potus98.wdfiles.com/local--files/wiki:devopsdays2012/DevOpsDays-BluesBrothers-B.jpg [/Photo Credit]</aside>
+					</section>
+					<section>
+						<h2> Operational Lifecycle </h2>
+						<ul class="fragment">
+	          				<li> Immutable infrastructure </li>
+	          				<li> No patching or in place deployments </li>
+	          			</ul>
+					</section>
+					<section>
+						<h2> Serverless architectures </h2>
+					</section>
+					<section>
+						<h2>  Monitoring and Metrics </h2>
+						<ul class="fragment">
+	          				<li> Centralized logging </li>
+	          				<li> Log Analytics </li>
+	          				<li> Build metrics, application metrics, customer experience metrics instead of CPU, memory and OS metrics </li>
+	          				<li> Event Storms </li>
+	          			</ul>
+					</section>
+				</section>
+				<section data-background="images/scary_path1.jpg">
+          		<div >
+          			<h2> <span class="white">Is this a scary path?</span></h2>	
+          		</div>
+          		<aside class="notes">
+          				[Photo Credit] https://beardedgospelmen.files.wordpress.com/2015/01/scary_path1.jpg[/Photo Credit]
+          		</aside>
+          		</section>	
+				<section>
+					<img src="images/namaste.jpg" alt="Namaste">
+					<h2><span> T  H  A  N  K  Y  O  U </span> </h2>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+		        touch: true,
+        		slideNumber: true,
+
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
