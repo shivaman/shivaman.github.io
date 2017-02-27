@@ -59,11 +59,11 @@
 				<section>	
 					<h2>Apps not Functions</h2>
 					<ul>
-						<li class="fragment"> Sequence Functions </li>
-						<li class="fragment"> Data based decision trees </li>
-						<li class="fragment"> Retry and Error Handling </li>
-						<li class="fragment"> Try-Catch-Finally </li>
-						<li class="fragment"> Workflows that run for hours </li>
+						<li> Sequence Functions </li>
+						<li> Data based decision trees </li>
+						<li> Retry and Error Handling </li>
+						<li> Try-Catch-Finally </li>
+						<li> Workflows that run for hours </li>
 					</ul>
 				</section>  
 				<section>
@@ -76,7 +76,7 @@
 	
 				<section>
 					<h4>AWS Step Functions</h4>	
-					<img class="noborders" src="images/StepFunction.jpg" width="600">
+					<img class="noborders" src="images/StepFunction.jpg" width="800">
 					<aside class="notes">
 						Step Function
  					</aside>				
@@ -100,13 +100,13 @@
 				<section>	
 					<h2>Seven state types</h2>
 					<ul>
-						<li class="fragment"> Task </li>
-						<li class="fragment"> Choice </li>
-						<li class="fragment"> Parallel </li>
-						<li class="fragment"> Wait </li>
-						<li class="fragment"> Fail </li>
-						<li class="fragment"> Suceed </li>
-						<li class="fragment"> Pass </li>
+						<li> Task </li>
+						<li> Choice </li>
+						<li> Parallel </li>
+						<li> Wait </li>
+						<li> Fail </li>
+						<li> Suceed </li>
+						<li> Pass </li>
 					</ul>
 				</section> 
 				<section>
@@ -166,11 +166,44 @@
 	{       
 					</code></pre>
 				</section>				
+
 				
 				<section>
 					<h4>Task State - Catch Failures</h4>	
 					<img class="noborders" src="images/CatchTaskFailure.jpg" width="600">				
 				</section>				
+				<section>
+					<h4>Complex error handling and retries</h4>
+					<pre><code data-trim>
+"X": {
+  "Type": "Task",
+  "Resource": "arn:aws:states:us-states-1:123456789012:task:X",
+  "Next": "Y",
+  "Retry": [
+    {
+      "ErrorEquals": [ "ErrorA", "ErrorB" ],
+      "IntervalSeconds": 1,
+      "BackoffRate": 2,
+      "MaxAttempts": 2
+    },
+    {
+      "ErrorEquals": [ "ErrorC" ],
+      "IntervalSeconds": 5
+    }
+  ],
+  "Catch": [
+    {
+      "ErrorEquals": [ "States.ALL" ],
+      "Next": "Z"
+    }
+  ]
+}       
+				</code></pre>
+				<aside class="notes">
+					Suppose that this task fails five successive times, throwing Error Names "ErrorA", "ErrorB", "ErrorC", "ErrorB" and "ErrorB". The first two errors match the first retrier and cause waits of one and two seconds. The third error matches the second retrier and causes a wait of five seconds. The fourth error matches the first retrier and causes a wait of four seconds. The fifth error also matches the first retrier, but it has already reached its limit of two retries ("MaxAttempts") for that particular error ("ErrorB") so it fails and execution is redirected to the "Z" state via the "Catch" field.
+				</aside>
+				</section>		
+				
 				<section>
 					<h4>Choice State</h4>
 					<pre><code data-trim>
@@ -187,7 +220,7 @@
 			"NumericEquals": 2,          
 	… ]        
 				</code></pre>
-				</section>		
+				</section>												
 				<section>
 					<h4>Choice State</h4>	
 					<img class="noborders" src="images/ChoiceState.jpg" width="600">				
@@ -242,7 +275,32 @@
 				</code></pre>
 				</section>				
 				
-							
+				<section>
+					<h4>Amazon States Language Spec</h4>	
+					<img class="noborders" src="images/AmazonStateLanguageSpec.jpg" width="800">
+					<aside class="notes">
+						Evolution of infrastructure and the architectures.
+					</aside>				
+				</section>					
+				<section>
+					<h4>Serverless Reference Architecture: Image Recognition and Processing Backend</h4>	
+					<img class="noborders" src="images/photo-processing-backend-diagram.png" width="800">
+					<small> <a href="https://github.com/awslabs/lambda-refarch-imagerecognition"> https://github.com/awslabs/lambda-refarch-imagerecognition </a> </small>
+					<aside class="notes">
+						Evolution of infrastructure and the architectures.
+					</aside>				
+				</section>						
+				<section>	
+					<h2>Gotchas</h2>
+					<small>(Feature Requests ?!)</small>
+					<ul>
+						<li> AWS Limits (StartExecution API has a limit of 100 and gets throttled to 2 per second) </li>
+						<li> Cannot edit State Machines </li>
+						<li> Task Activity is polling only (Hint : Needs SNS or HTTP endpoint to be truly serverless) </li>
+						<li> Activity ARN is potentially guessable </li>
+						<li> Available in N.Virginia, Ohio, Oregon, Tokyo, Ireland </li>
+					</ul>
+				</section>  							
 				<section>
 					<img src="images/namaste.jpg" alt="Namaste">
 					<h2><span> T  H  A  N  K  Y  O  U </span> </h2>
