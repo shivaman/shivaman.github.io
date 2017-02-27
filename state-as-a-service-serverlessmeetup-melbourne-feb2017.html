@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>State as a Service - ShivaN</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>State as a Service</h1>
+					<h3>(still serverless...)</h3>
+					<p>
+						<small>Melbourne Serverless Meetup - Feb 28 2017</small>
+					</p>
+					<p>
+						<small>Created by <a href="http://shivaman.com">Shiva Narayanaswamy</a> / <a href="http://twitter.com/shivamaan">@shivamaan</a></small>
+					</p>
+				</section>
+				<section>
+					<h4>Evolution</h4>	
+					<img class="noborders" src="images/PetsCattleRabbitsMicrobes.png" width="600">
+					<aside class="notes">
+						Evolution of infrastructure and the architectures.
+					</aside>				
+				</section>
+					
+				<section>
+					<h4>Serverless Reference Architecture</h4>	
+					<img class="noborders" src="images/ServerlessMapReduceRefArch.png" width="800">
+					<aside class="notes">
+						MapReduce Serverless reference architecture.
+					</aside>				
+				</section>
+				<section>
+					<h4>Lambda Explosion</h4>	
+					<img class="noborders" src="images/LotsofLambdas.jpg" width="800">
+					<aside class="notes">
+						Lots of Lambdas.
+					</aside>				
+				</section>					
+				<section>	
+					<h2>Apps not Functions</h2>
+					<ul>
+						<li class="fragment"> Sequence Functions </li>
+						<li class="fragment"> Data based decision trees </li>
+						<li class="fragment"> Retry and Error Handling </li>
+						<li class="fragment"> Try-Catch-Finally </li>
+						<li class="fragment"> Workflows that run for hours </li>
+					</ul>
+				</section>  
+				<section>
+					<h4>We need Coordination</h4>	
+					<img class="noborders" src="images/TrafficJam.jpg" width="800">
+					<aside class="notes">
+						Coordination by method call, function chaining, databases, key value store, queues.
+					</aside>				
+				</section>	
+	
+				<section>
+					<h4>AWS Step Functions</h4>	
+					<img class="noborders" src="images/StepFunction.jpg" width="600">
+					<aside class="notes">
+						Step Function
+ 					</aside>				
+				</section>		
+				<section>
+					<h4>Hello World</h4>
+					<pre><code data-trim>
+{  
+	”Comment”: “Hello World Example",  
+	"StartAt” : "HelloWorld”,  
+	"States” : {    
+	"HelloWorld” : {      
+		"Type” : "Task",      
+		"Resource” : "arn:aws:lambda:REGION:ACCOUNT_ID:function:FUNCTION_NAME”,      
+		"End” : true    
+		}  
+	}
+}
+					</code></pre>
+				</section>		
+				<section>	
+					<h2>Seven state types</h2>
+					<ul>
+						<li class="fragment"> Task </li>
+						<li class="fragment"> Choice </li>
+						<li class="fragment"> Parallel </li>
+						<li class="fragment"> Wait </li>
+						<li class="fragment"> Fail </li>
+						<li class="fragment"> Suceed </li>
+						<li class="fragment"> Pass </li>
+					</ul>
+				</section> 
+				<section>
+					<h4>Poll or Push</h4>	
+					<img class="noborders" src="images/TaskPollPush.jpg" width="800">
+					<aside class="notes">
+						Task Poll or Push.
+					</aside>				
+				</section>	
+				<section>
+					<h4>Task State</h4>
+					<pre><code data-trim>
+{  
+	”Comment”: “Hello World Example",  
+	"StartAt” : "HelloWorld”,  
+	"States” : {    
+	"HelloWorld” : {      
+		"Type” : "Task",      
+		"Resource” : "arn:aws:lambda:REGION:ACCOUNT_ID:function:FUNCTION_NAME”,      
+		"End” : true    
+		}  
+	}
+}
+				</code></pre>
+				</section>	
+				<section>
+					<h4>Task State - Retry Failures</h4>
+					<pre><code data-trim>
+"HelloWorld": {      
+	"Type": "Task",      
+	…
+	"Retry": [        
+	{          			
+		"ErrorEquals": ["HandledError"],          	
+		"IntervalSeconds": 1,          	
+		"MaxAttempts": 2,          	
+		"BackoffRate": 2.0        
+	},
+	… ]
+					</code></pre>
+				</section>	
+				<section>
+					<h4>Task State - Catch Failures</h4>
+					<pre><code data-trim>
+"HelloWorld": { 
+	"Type": "Task",      
+	…
+	"Catch": [        
+	{          
+	"ErrorEquals": ["HandledError"],          	
+	"Next": "CustomErrorFallback"        
+	},        
+	{          
+	"ErrorEquals": ["States.TaskFailed"],          	
+	"Next": "ReservedTypeFallback"        
+	… ]       
+	{       
+					</code></pre>
+				</section>				
+				
+				<section>
+					<h4>Task State - Catch Failures</h4>	
+					<img class="noborders" src="images/CatchTaskFailure.jpg" width="600">				
+				</section>				
+				<section>
+					<h4>Choice State</h4>
+					<pre><code data-trim>
+"ChoiceState": {      
+	"Type" : "Choice",      
+	"Choices": [        
+		{          
+			"Variable": "$.foo",          
+			"NumericEquals": 1,          
+			"Next": "FirstMatchState"        
+		},        
+		{          
+			"Variable": "$.foo",          
+			"NumericEquals": 2,          
+	… ]        
+				</code></pre>
+				</section>		
+				<section>
+					<h4>Choice State</h4>	
+					<img class="noborders" src="images/ChoiceState.jpg" width="600">				
+				</section>				
+				<section>
+					<h4>Parallel State</h4>
+					<pre><code data-trim>
+"LookupCustomerInfo": {
+  "Type": "Parallel",
+  "Branches": [
+    {
+      "StartAt": "LookupAddress",
+      "States": {
+        "LookupAddress": {
+          "Type": "Task",
+          "Resource":
+            "arn:aws:lambda:us-east-1:123456789012:function:AddressFinder",
+          "End": true
+        }
+      }
+    },
+    {
+      "StartAt": "LookupPhone",
+      "States": {
+        "LookupPhone": {
+          "Type": "Task",
+          "Resource":
+            "arn:aws:lambda:us-east-1:123456789012:function:PhoneFinder",
+          "End": true
+        }
+      }
+    }
+  ],
+  "Next": "NextState"
+}, 
+				</code></pre>
+				</section>			
+						
+				<section>
+					<h4>Wait State</h4>
+					<pre><code data-trim>
+"wait_using_seconds": {      
+	"Type": "Wait",      
+	"Seconds": 10,      
+	"Next": "wait_using_timestamp"    
+	},    
+"wait_using_timestamp": {      
+	"Type": "Wait",      
+	"Timestamp": "2015-09-04T01:59:00Z",     
+	"Next": "wait_using_timestamp_path"    
+	},
+				</code></pre>
+				</section>				
+				
+							
+				<section>
+					<img src="images/namaste.jpg" alt="Namaste">
+					<h2><span> T  H  A  N  K  Y  O  U </span> </h2>
+					<p>
+						<small> <a href="http://shivaman.com">Shiva Narayanaswamy</a> / <a href="http://twitter.com/shivamaan">@shivamaan</a></small>
+					</p>
+				</section>   																												      					
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
