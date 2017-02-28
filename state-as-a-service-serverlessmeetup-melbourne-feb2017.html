@@ -23,6 +23,7 @@
 	</head>
 	<body>
 		<div class="reveal">
+			
 			<div class="slides">
 				<section>
 					<h1>State as a Service</h1>
@@ -36,7 +37,7 @@
 				</section>
 				<section>
 					<h4>Evolution</h4>	
-					<img class="noborders" src="images/PetsCattleRabbitsMicrobes.png" width="600">
+					<img class="noborders" src="images/PetsCattleRabbitsMicrobes.png" width="800">
 					<aside class="notes">
 						Evolution of infrastructure and the architectures.
 					</aside>				
@@ -45,15 +46,17 @@
 				<section>
 					<h4>Serverless Reference Architecture</h4>	
 					<img class="noborders" src="images/ServerlessMapReduceRefArch.png" width="800">
-					<aside class="notes">
-						MapReduce Serverless reference architecture.
+					<aside class="notes"> 
+						<a href="https://github.com/awslabs/lambda-refarch-mapreduce">Here </a>is a sample serverless reference architecture. MapReduce Serverless reference architecture. When you have to actually implement this and operate and run it, 
+						there are a lot of other aspects to consider. Failed Lambda functions, malformed data, error handling, retries, throttling, exponential backoffs etc etc. 
 					</aside>				
 				</section>
 				<section>
 					<h4>Lambda Explosion</h4>	
 					<img class="noborders" src="images/LotsofLambdas.jpg" width="800">
 					<aside class="notes">
-						Lots of Lambdas.
+						So in a lot of cases, we end up with a lot of Lambdas, and it soon gets out of hand. With features like Lambda Dead letter Queues, we have some means of gracefully handling
+						failures. However with Lambda DLQs, we do lose track of state when the failure happened.
 					</aside>				
 				</section>					
 				<section>	
@@ -65,15 +68,35 @@
 						<li> Try-Catch-Finally </li>
 						<li> Workflows that run for hours </li>
 					</ul>
+					<aside class="notes">
+						We want cleaner ways of writing entire applications using serverless technologies. 
+					</aside>
 				</section>  
 				<section>
 					<h4>We need Coordination</h4>	
 					<img class="noborders" src="images/TrafficJam.jpg" width="800">
 					<aside class="notes">
 						Coordination by method call, function chaining, databases, key value store, queues.
+						[PhotoCredit] https://www.youtube.com/watch?v=iEIk3RpV6RA [/PhotoCredit]
 					</aside>				
 				</section>	
-	
+				<section>
+					<h4>Enter State Machines</h4>	
+					<img class="noborders" src="images/StateMachine.jpg" width="800">
+					<aside class="notes">
+						State machine. Moore and Mealy Machines
+					</aside>				
+				</section>	
+				<section>
+					<h4>State Machines in two minutes</h4>	
+					<table><tr>
+						<td><img class="noborders" src="images/Prince_of_Persia.jpg" width="460"></td>
+						<td><img class="noborders" src="images/state-flowchart.png" width="400"></td>
+					</tr></table>
+					<aside class="notes">
+						http://gameprogrammingpatterns.com/state.html
+					</aside>				
+				</section>	
 				<section>
 					<h4>AWS Step Functions</h4>	
 					<img class="noborders" src="images/StepFunction.jpg" width="800">
@@ -99,15 +122,36 @@
 				</section>		
 				<section>	
 					<h2>Seven state types</h2>
-					<ul>
-						<li> Task </li>
-						<li> Choice </li>
-						<li> Parallel </li>
-						<li> Wait </li>
-						<li> Fail </li>
-						<li> Suceed </li>
-						<li> Pass </li>
-					</ul>
+					<table>
+						<tr>
+							<td>Task</td>
+							<td>A single unit of work (Activity or Lambda)</td>
+						</tr>
+						<tr>
+							<td>Choice</td>
+							<td>Branching logic</td>
+						</tr>
+						<tr>
+							<td>Parallel</td>
+							<td>Fork and join data across tasks</td>
+						</tr>
+						<tr>
+							<td>Wait</td>
+							<td>Delay</td>
+						</tr>
+						<tr>
+							<td>Fail</td>
+							<td>Stops execution as a failure</td>
+						</tr>
+						<tr>
+							<td>Suceed</td>
+							<td>Stops execution as a success</td>
+						</tr>
+						<tr>
+							<td>Pass</td>
+							<td>Input to output pass through</td>
+						</tr>
+					</table>
 				</section> 
 				<section>
 					<h4>Poll or Push</h4>	
@@ -200,7 +244,10 @@
 }       
 				</code></pre>
 				<aside class="notes">
-					Suppose that this task fails five successive times, throwing Error Names "ErrorA", "ErrorB", "ErrorC", "ErrorB" and "ErrorB". The first two errors match the first retrier and cause waits of one and two seconds. The third error matches the second retrier and causes a wait of five seconds. The fourth error matches the first retrier and causes a wait of four seconds. The fifth error also matches the first retrier, but it has already reached its limit of two retries ("MaxAttempts") for that particular error ("ErrorB") so it fails and execution is redirected to the "Z" state via the "Catch" field.
+					Suppose that this task fails five successive times, throwing Error Names "ErrorA", "ErrorB", "ErrorC", "ErrorB" and "ErrorB". 
+					The first two errors match the first retrier and cause waits of one and two seconds. The third error matches the second retrier and causes a wait of five seconds. 
+					The fourth error matches the first retrier and causes a wait of four seconds. The fifth error also matches the first retrier, but it has already reached its limit 
+					of two retries ("MaxAttempts") for that particular error ("ErrorB") so it fails and execution is redirected to the "Z" state via the "Catch" field.
 				</aside>
 				</section>		
 				
@@ -276,10 +323,12 @@
 				</section>				
 				
 				<section>
-					<h4>Amazon States Language Spec</h4>	
-					<img class="noborders" src="images/AmazonStateLanguageSpec.jpg" width="800">
+					<h4>Amazon States Language Spec</h4>
+					<small><a href="https://states-language.net/spec.html"> https://states-language.net/spec.html</a></small>	
+					<img class="noborders" src="images/AmazonStateLanguageSpec.jpg" width="600">
+					<small><a href="https://github.com/awslabs/statelint"> https://github.com/awslabs/statelint</a></small>
 					<aside class="notes">
-						Evolution of infrastructure and the architectures.
+						Amazon States Language.
 					</aside>				
 				</section>					
 				<section>
@@ -287,17 +336,53 @@
 					<img class="noborders" src="images/photo-processing-backend-diagram.png" width="800">
 					<small> <a href="https://github.com/awslabs/lambda-refarch-imagerecognition"> https://github.com/awslabs/lambda-refarch-imagerecognition </a> </small>
 					<aside class="notes">
-						Evolution of infrastructure and the architectures.
+						<ul>
+						<li>An image is uploaded to the PhotoRepo S3 bucket under the "Incoming/" prefix </li>
+						<li>The S3 upload event triggers the ImageProcStartExecution Lambda function, which kicks off an execution of the ImageProc state machine in AWS Step Functions, passing in 
+						the S3 bucket and object key as input parameters.</li>
+						<li>The ImageProc state machine has the following sub-steps:</li>
+							<ul>
+							<li>Read the file from S3 and extract image metadata (format, EXIF data, size, etc.)</li>
+							<li>Based on output from previous step, validate if the file uploaded is a supported file format (png or jpg). If not, throw NotSupportedImageType error and end 
+							execution.</li>
+							<li>Store the extracted metadata in the ImageMetadata DynamoDB table</li>
+							<li>In parallel, kick off two processes simultaneously:</li>
+								<ul>
+									<li>Call Amazon Rekognition to detect objects in the image file. If detected, store the tags in the ImageMetadata DynamoDB table</li>
+									<li>Generate a thumbnail and store it under the "Thumbnails/" prefix in the PhotoRepo S3 bucket</li>
+								</ul>
+							</ul>
+						</ul>
 					</aside>				
-				</section>						
+				</section>
+				<section>
+					<h4>Manual Approvals</h4>	
+					<img class="noborders" src="images/ManualApprovals.png" width="800">
+					<small><a href="https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/"> https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/</a></small>
+					<aside class="notes">
+						Manual Approvals
+					</aside>				
+				</section>					
+				<section>	
+					<h2>Use Cases</h2>
+					<ul>
+						<li> Asynchronous data processing (Also think AWS Batch)</li>
+						<li> Business process workflow (FoodPanda)</li>
+						<li> Intelligent application delivery pipelines </li>
+						<li> Event driven workflows</li>
+						<li> <a href="https://hackernoon.com/building-a-business-from-a-great-idea-some-future-monday-42ba794fdae5#.wiwz33dg0">Building a business from a great idea - Simon Wardley</a></li>
+					</ul>
+				</section>  											
 				<section>	
 					<h2>Gotchas</h2>
 					<small>(Feature Requests ?!)</small>
 					<ul>
 						<li> AWS Limits (StartExecution API has a limit of 100 and gets throttled to 2 per second) </li>
 						<li> Cannot edit State Machines </li>
-						<li> Task Activity is polling only (Hint : Needs SNS or HTTP endpoint to be truly serverless) </li>
+						<li> Task Activity is polling only (Hint : Needs SNS or HTTP endpoint to be truly asynchronous) </li>
 						<li> Activity ARN is potentially guessable </li>
+						<li> Event Driven State Machines</li>
+						<li> State Machine based development, testing, operations and tooling</li>
 						<li> Available in N.Virginia, Ohio, Oregon, Tokyo, Ireland </li>
 					</ul>
 				</section>  							
@@ -327,6 +412,7 @@
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
+			Reveal.configure({ slideNumber: 'c/t' });
 		</script>
 	</body>
 </html>
