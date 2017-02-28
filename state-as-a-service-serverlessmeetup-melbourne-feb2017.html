@@ -91,10 +91,10 @@
 					<h4>State Machines in two minutes</h4>	
 					<table><tr>
 						<td><img class="noborders" src="images/Prince_of_Persia.jpg" width="460"></td>
-						<td><img class="noborders" src="images/state-flowchart.png" width="400"></td>
+						<td class="fragment"><img class="noborders" src="images/state-flowchart.png" width="400"></td>
 					</tr></table>
 					<aside class="notes">
-						http://gameprogrammingpatterns.com/state.html
+						[PictureCredit] http://gameprogrammingpatterns.com/state.html [/PictureCredit]
 					</aside>				
 				</section>	
 				<section>
@@ -333,7 +333,8 @@
 				</section>					
 				<section>
 					<h4>Serverless Reference Architecture: Image Recognition and Processing Backend</h4>	
-					<img class="noborders" src="images/photo-processing-backend-diagram.png" width="800">
+					<img class="noborders" src="images/photo-processing-backend-diagram.png" width="610">
+					<img class="noborders" src="images/step-function-execution.png" width="300">
 					<small> <a href="https://github.com/awslabs/lambda-refarch-imagerecognition"> https://github.com/awslabs/lambda-refarch-imagerecognition </a> </small>
 					<aside class="notes">
 						<ul>
@@ -366,7 +367,7 @@
 				<section>	
 					<h2>Use Cases</h2>
 					<ul>
-						<li class="fragment"> Asynchronous data processing (Also think AWS Batch)</li>
+						<li> Asynchronous data processing (Also think AWS Batch)</li>
 						<li class="fragment"> Business process workflow (FoodPanda)</li>
 						<li class="fragment"> Intelligent application delivery pipelines </li>
 						<li class="fragment"> Event driven workflows</li>
@@ -378,7 +379,7 @@
 					<h2>Gotchas</h2>
 					<small>(Feature Requests ?!)</small>
 					<ul>
-						<li class="fragment"> AWS Limits (StartExecution API has a limit of 100 and gets throttled to 2 per second) </li>
+						<li> AWS Limits (StartExecution API has a limit of 100 and gets throttled to 2 per second) </li>
 						<li class="fragment"> Cannot edit State Machines </li>
 						<li class="fragment"> Task Activity is polling only (Hint : Needs SNS or HTTP endpoint to be truly asynchronous) </li>
 						<li class="fragment"> Activity ARN is potentially guessable </li>
