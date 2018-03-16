@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Look Ma! No servers...</title>
+
+		<meta name="description" content="Look Ma! No servers... - A talk for DevOpsTalks 2018, created with reveal.js">
+		<meta name="author" content="Shiva N">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/devopstalks-black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class='footer'>
+		    	<img src="images/DOC-Logo.png" alt="Namaste">
+		  	</div>
+			<div class="slides">
+				<section data-background-image="images/Melbourne_DevopsTalks.jpg">
+					<h2>Look Ma! No servers...</h2>
+					<img src="images/bikenohands.jpg" alt="No hands Ma">
+					<p>
+						<smaller>Now how are we going to feed ourselves son?! </smaller><br>
+					</p>
+
+				</section>
+				<section>
+					<img src="images/shiva.jpg" alt="Shiva" width="400">
+					<p>
+						<small> <a href="http://shivaman.com" >Shiva Narayanaswamy</a> / <a href="http://twitter.com/shivamaan">@shivamaan / <a href="https://envato.com/"  style="color:#83B641">Envato </a></small>
+						<br> 
+						<smaller> Learner of systems, practicer of practices and thinker of things</smaller>
+					</p>
+				</section>				
+				<section>
+					<img src="images/morpheus-serverless-meme.jpg" alt="Morpheus Meme" height="600" width="600">
+					<aside class="notes">
+						[Credit] http://memebetter.com/generator [/Credit]
+
+						Serverless is a Noun...
+					</aside>
+				</section>	
+
+
+				<section>	
+     				<h2>Smells like Serverless</h2>
+        			<ul>
+          				<li class="fragment"> You don’t make infrastructure choices </li>
+          					<ul style="list-style-type:none">
+          						<li class="fragment"><small> How big... What size... Which subnet...</small></li>
+          					</ul>
+          				<li class="fragment"> You don’t make capacity choices </li>
+           					<ul style="list-style-type:none">
+          						<li class="fragment"><small> Do I need autoscaling... How many instances do I need...</small></li>
+          					</ul>
+          				<li class="fragment"> You don’t make software choices </li>
+           					<ul style="list-style-type:none">
+          						<li class="fragment"><small> Which OS... What patch level...</small></li>
+          					</ul>	          				
+          				<li class="fragment"> You don’t pay for idle capacity </li>
+        			</ul>
+        			<aside class="notes">
+        				Notes
+        			</aside>
+          		</section>
+
+				<section>
+					<img src="images/kelsey-tweet.png" alt="Kelsey Tweet" height="224" width="603">
+					<aside class="notes">
+						[Credit] https://twitter.com/kelseyhightower/status/972121852288974849 [/Credit]
+
+						Serverless is a Noun...
+					</aside>
+				</section>	
+				<section data-background="images/shades-of-grey.jpg">
+					<div class="see-through">
+		          			<h2><span class="white">Shades of serverless</span></h2>
+		        			<ul>
+		          				<li class="fragment"> Compute (FaaS) </li>
+		          					<ul style="list-style-type:none">
+		          						<li class="fragment"><small> AWS Lambda, Azure Functions, Google Cloud Functions, Stdlib...</small></li>
+		          					</ul>
+		          				<li class="fragment"> Database </li>
+		           					<ul style="list-style-type:none">
+		          						<li class="fragment"><small> DynamoDB, Firebase... </small></li>
+		          					</ul>
+		          				<li class="fragment"> Containers </li>
+		           					<ul style="list-style-type:none">
+		          						<li class="fragment"><small> Fargate...</small></li>
+		          					</ul>	          				
+		          				<li class="fragment"> Specialized SaaS Compute </li>
+		           					<ul style="list-style-type:none">
+		          						<li class="fragment"><small> Cloudflare workers, Auth0 webtasks...</small></li>
+		          					</ul>	
+		          				<li class="fragment"> Others </li>
+		           					<ul style="list-style-type:none">
+		          						<li class="fragment"><small> Algorithmia...</small></li>
+		          					</ul>			          						          				
+		        			</ul>		          			
+		          			<aside class="notes">
+								[Credit] https://maureen707.files.wordpress.com/2015/05/paint-fan.jpg [Credit]
+							</aside>
+		          	</div>
+				</section>
+				<section data-background="images/i-care.jpg">
+					<aside class="notes">						
+						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
+
+						It is the things you care about that defines you
+					</aside>	
+				</section>  
+				<section>
+					<img src="images/hammer.jpg" alt="Hammer and Screw">
+					<aside class="notes">
+						[Credit]  [/Credit]
+
+					</aside>
+				</section>	
+				<section>
+					<h4> Serverless function Execution Models </h4>	
+					<img src="images/lambda-execution-models.png" width="800">				
+				</section>				
+				<section>
+					<h2> Asynchronous workflows </h2>
+					<small> EVENTS AND STREAMS </small><br>
+					<img src="images/ripple-counter-async.gif" alt="Ripple Counter" width="60%" height="60%">
+					<aside class="notes">
+						[Credit] https://i.stack.imgur.com/MoGhu.gif [/Credit]
+						The beauty
+					</aside>
+				</section>	
+				<section>
+					<h4>Rube Goldberg architecture </h4>	
+					<img src="images/LotsofLambdas.jpg" width="800">				
+				</section>
+				<section>
+					<h4>Coordination</h4>	
+					<img class="noborders" src="images/StepFunction.jpg" width="800">
+					<aside class="notes">
+						Step Function
+ 					</aside>				
+				</section>					
+				<section>
+					<h4>Just because you can doesn't mean you should </h4>	
+					<img src="images/vpc-lambda.png" width="800">	
+					<aside class="notes">
+						Yes you can, but should you?
+					</aside>			
+				</section>		
+				<section>
+					<h4>Make it Async </h4>	
+					<img src="images/async-req-resp.png" width="60%" height="60%">	
+					<aside class="notes">
+						Notes
+					</aside>			
+				</section>							
+				<section>
+					<h4>Noops Nirvana? </h4>						
+					<img src="images/auto-pilot.jpg" alt="Auto Pilot" width="60%" height="60%">
+					<aside class="notes">
+						[Credit]  [/Credit]
+
+					</aside>
+				</section>	
+				<section>
+					<img src="images/i-care.jpg" alt="Auto Pilot" width="30%" height="30%">
+					<h4> about </h4>
+					<h2> <span style="color:orange;">Deployments </span></h2>
+					<aside class="notes">						
+						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
+					</aside>	
+				</section>  				
+				<section>
+					<img src="images/i-care.jpg" alt="Auto Pilot" width="30%" height="30%">
+					<h4> about </h4>
+					<h2> <span style="color:orange;">Security </span></h2>
+					<aside class="notes">						
+						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
+					</aside>	
+				</section> 
+				<section>
+					<img src="images/i-care.jpg" alt="Auto Pilot" width="30%" height="30%">
+					<h4> about </h4>
+					<h2> <span style="color:orange;">Observability </span></h2>
+					<aside class="notes">						
+						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
+					</aside>	
+				</section> 
+				<section>
+					<h2> Serverless first… </h2>
+					<h4> a loosely held strong opinion </h4>
+				</section>																							
+				<section>
+					<img src="images/namaste.jpg" alt="Namaste" width="400">
+					<h2><span> T  H  A  N  K  Y  O  U </span> </h2>
+					<small> Presentation available at <a href="https://shivaman.github.io/">https://shivaman.github.io/</a></small>
+					<p>
+						<small> <a href="http://shivaman.com" >Shiva Narayanaswamy</a> / <a href="http://twitter.com/shivamaan">@shivamaan</a></small>
+					</p>
+					<aside class="notes">						
+						[PhotoCredit] http://www.publicdomainpictures.net/pictures/30000/velka/praying-hands-1341827347OnP.jpg [/PhotoCredit]
+					</aside>	
+				</section>  											
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
