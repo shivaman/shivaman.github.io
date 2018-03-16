@@ -193,6 +193,39 @@
 					</aside>	
 				</section> 
 				<section>
+					<img src="images/lambda-patched.png" alt="Lambda patched" height="336" width="607">
+					<aside class="notes">						
+						Rumours about Meltdown and Spectre started circulating around Christmas 2017. The original embargo lift date was Jan 9 2018. Jan 3rd the embargo was broken because of growing speculation. Google, Amazon etc release Processor Speculative Execution Research Disclosures
+
+						https://aws.amazon.com/security/security-bulletins/AWS-2018-013/v1/
+					</aside>	
+				</section> 	
+				<section>
+					<h4> Vulnerable Libraries </h4>
+					<img src="images/snyk-lambda.png" alt="Vulnerable Libraries" >
+					<aside class="notes">						
+						[Credit] https://snyk.io/docs/aws-lambda [/Credit]
+					</aside>	
+				</section> 		
+				<section>
+					<h2> Secrets </h2>
+					<aside class="notes">						
+						Fetch from Parameter Store. At the very least encrypt with KMS in env variables.
+					</aside>	
+				</section> 	
+				<section>
+					<h2> Permissions </h2>
+					<aside class="notes">						
+						Fine grained per function permissions. If you are running multiple versions of the function that require slightly different permissions, it gets complicated. You cannot tie a lambda version to an IAM policy version. 
+					</aside>	
+				</section> 	
+				<section>
+					<h2> DoS attacks </h2>
+					<aside class="notes">						
+						Notes
+					</aside>	
+				</section> 															
+				<section>
 					<img src="images/i-care.jpg" alt="Auto Pilot" width="30%" height="30%">
 					<h4> about </h4>
 					<h2> <span style="color:orange;">Observability </span></h2>
@@ -200,6 +233,21 @@
 						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
 					</aside>	
 				</section> 
+				<section data-background="images/four-pillars.jpg">
+					<div class="see-through">
+						<h4> Four Pillars </h4>
+						<ul>
+	          				<li> Monitoring </li>
+	          				<li> Alerting/Vizualization </li>
+	          				<li> Distributed systems tracing infrastructure </li>
+	          				<li> Log aggregation/analytics </li>
+	          			</ul>
+	          		</div>
+					<aside class="notes">						
+						[Credit] https://blog.twitter.com/engineering/en_us/a/2016/observability-at-twitter-technical-overview-part-i.html [/Credit]
+						[Credit] https://www.dphotographer.co.uk/image/308251/four_pillars [/Credit]
+					</aside>	
+				</section> 				
 				<section>
 					<h2> Serverless first… </h2>
 					<h4> a loosely held strong opinion </h4>
@@ -226,6 +274,8 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+				progress: true,
+				controlsLayout: 'edges',
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
@@ -233,6 +283,8 @@
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
+			Reveal.configure({ slideNumber: 'c/t' });
+
 		</script>
 	</body>
 </html>
