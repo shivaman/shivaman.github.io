@@ -36,7 +36,9 @@
 					<p>
 						<smaller>Now how are we going to feed ourselves son?! </smaller><br>
 					</p>
-
+					<aside class="notes">
+						Look Ma! No Hands...For something daring...I figure at the moment serious adoption of serverless technologies is a daring act for a lot of us. 
+					</aside>
 				</section>
 				<section>
 					<img src="images/ShivaB&W.jpg" alt="Shiva" width="400">
@@ -54,8 +56,6 @@
 						Serverless is a Noun...
 					</aside>
 				</section>	
-
-
 				<section>	
      				<h2>Smells like Serverless</h2>
         			<ul>
@@ -74,16 +74,13 @@
           				<li class="fragment"> You don’t pay for idle capacity </li>
         			</ul>
         			<aside class="notes">
-        				Notes
+        				The serverless smell test. 
         			</aside>
           		</section>
-
 				<section>
 					<img src="images/kelsey-tweet.png" alt="Kelsey Tweet" height="224" width="603">
 					<aside class="notes">
 						[Credit] https://twitter.com/kelseyhightower/status/972121852288974849 [/Credit]
-
-						Serverless is a Noun...
 					</aside>
 				</section>	
 				<section data-background="images/shades-of-grey.jpg">
@@ -98,6 +95,8 @@
 		        			</ul>		          			
 		          			<aside class="notes">
 								[Credit] https://maureen707.files.wordpress.com/2015/05/paint-fan.jpg [Credit]
+
+								Smell tests might not really be black or white sometimes.
 							</aside>
 		          	</div>
 				</section>
@@ -105,19 +104,21 @@
 					<aside class="notes">						
 						[Credit] https://thoughtschange.files.wordpress.com/2011/08/wpid-i_care1.jpg [/Credit]
 
-						It is the things you care about that defines you
+						It is the things you care about that defines you.And it is in those things we care about that we build our skills, and the radius of our care factor that put us in our silos like DevOps engineers, SREs, QAs etc.
 					</aside>	
 				</section>  
 				<section>
 					<img src="images/hammer.jpg" alt="Hammer and Screw">
 					<aside class="notes">
-						[Credit]  [/Credit]
-
+						There are places where using the serverless hammer might not be the most optimal solution. In the end you make the customer your pole star, and you figure out what quality attributes you are optimising for, and your technology choices will follow that.
 					</aside>
 				</section>	
 				<section>
 					<h4> Serverless function Execution Models </h4>	
-					<img src="images/lambda-execution-models.png" width="800">				
+					<img src="images/lambda-execution-models.png" width="800">	
+					<aside class="notes">
+						The first two patterns for me to use serverless compute are the asynchronous patterns triggered by event like coming from a notification service like SNS, or S3 event notifications, and the ones triggered by streams like Kinesis or DynamoDB streams, or even the IoT service. Asynchronous workflows triggered by events and streams are no brainers for me and have well defined serverless architectural patterns. The 3rd one, which I think is where there is a lot of discussions, and typically is what most people try to use serverless for the first time, is the synchronous invocations. Write a Lambda function, put API Gateway in front of you, and it is so easy to create rich APIs without running an servers yourself. But IMHO this is also where most of the troubles are. I am not saying this is not a good pattern, just that you will need to think about the attributes you are optimizing for and whether the idiosynchrasies of this pattern meet your needs.
+					</aside>
 				</section>				
 				<section>
 					<h2> Asynchronous workflows </h2>
@@ -125,32 +126,35 @@
 					<img src="images/ripple-counter-async.gif" alt="Ripple Counter" width="60%" height="60%">
 					<aside class="notes">
 						[Credit] https://i.stack.imgur.com/MoGhu.gif [/Credit]
-						The beauty
+						That is an asynchronous ripple counter. Notice that the clock signal goes to the first flip-flop only, and the rest of them trigger in a cascading fashion at the negedge of the other flipflops. That is an abstract way of saying, triggering an asynchronous workflow from events and streams is a perfect usecase for serverless technologies.
 					</aside>
 				</section>	
 				<section>
 					<h4>Rube Goldberg architecture </h4>	
-					<img src="images/rube-lambdas.png" width="800">				
+					<img src="images/rube-lambdas.png" width="800">	
+					<aside class="notes">
+						Rube Goldberg machines if you didnt know are really complicated machines to do something simple. They are fun to stitch together, but not fun to run a Rube Goldberg machine in production. Dont create Lambda Frankensteins like this. 
+					</aside>									
 				</section>
 				<section>
 					<h4>Coordination</h4>	
 					<img class="noborders" src="images/StepFunction.jpg" width="800">
 					<aside class="notes">
-						Step Function
+						Orchestrate asynchronous workflows with Step Functions. State machine based design. Step functions has inbuilt retries and error handlings.
  					</aside>				
 				</section>					
 				<section>
 					<h4>Just because you can doesn't mean you should </h4>	
 					<img src="images/vpc-lambda.png" width="800">	
 					<aside class="notes">
-						Yes you can, but should you?
+						Yes you can, but should you? Yes you can quite easly put a Lambda function behind API gateway and get a serverless API going in no time. But typically you will have some sort of authentication (custom authorizer?), some logic in your function, which might make one or more API calls to other services or systems or some data source, and return back. Depending on scale you will have to deal with cold start taxes at some point in time. If you have a user waiting on the other end, you want to make sure it doesnt affect their experience. If you have your Lambda function reaching into your VPC like in this slide, you have to deal with worse cold start times to attach ENIs. Then you go about hacking your way to keep your functions warm. In those cases consider well architected containers or EC2, because they will have less moving parts.
 					</aside>			
 				</section>		
 				<section>
 					<h4>Make it Async </h4>	
 					<img src="images/async-req-resp.png" width="60%" height="60%">	
 					<aside class="notes">
-						Notes
+						Design asynchronous API calls
 					</aside>			
 				</section>
 				<section>
@@ -165,7 +169,7 @@
 					<h4>Noops Nirvana? </h4>						
 					<img src="images/auto-pilot.jpg" alt="Auto Pilot" width="60%" height="60%">
 					<aside class="notes">
-						[Credit]  [/Credit]
+						Not !
 					</aside>
 				</section>	
 				<section>
@@ -181,6 +185,9 @@
 					<img src="images/tool-sprawl.jpg" alt="Lots of tools" width="60%" height="60%">
 					<aside class="notes">
 						[Credit] https://www.flickr.com/photos/adam_jones/11215737103 [/Credit]
+						There are many many tools out there to package, ship and safely deploy functions. Serverless framework, Serverless Application Model, Apex, Claudia and others, and a few home grown ones too. Each of them have their pros and cons, and none of them are perfect. Many of them on the backend depend on Cloudformation, and I dont think that is the right choice to deploy functions. Cloudformation is an infrastructure context, and at the moment uses infrastructure paradigms to deal with Lambdas. 
+
+						Typically I see the developer type tend to prefer the serverless framework, and the infrastructur-ey type prefer Apex or SAM. Each of these tools have their own opinionated defaults, and know what they are and see if they match your sensible defaults. SAM has come leaps and bounds in the recent past. sam-local allows to local testing without having to mock all your API calls.
 					</aside>
 				</section>					
 				<section>
@@ -188,6 +195,7 @@
 					<img src="images/starling.jpg" alt="Swarm of Starlings" width="60%" height="60%">
 					<aside class="notes">
 						[Credit] https://commons.wikimedia.org/wiki/File:Fugle,_%C3%B8rns%C3%B8_073.jpg [/Credit]
+						You want to proactively sweep your active regions and garbage collect unused Functions and function versions as well.
 					</aside>
 				</section>	
 				<section>
@@ -195,6 +203,14 @@
 					<img src="images/pipelines.jpg" alt="Steam pipelines" width="60%" height="60%">
 					<aside class="notes">
 						[Credit] https://commons.wikimedia.org/wiki/File:Steam_Pipelines_Near_Taupo.jpg [/Credit]
+						if you have a synchronous API, you could potentially orchestrate a portion of your traffic to go to a new version...think canary deployments...run some tests or watch some metrics and slowly cut over. Or you might choose to swap function versions using aliases and do a blue-green style.
+
+						When you have asynchronous architectures and functions triggered by events you dont have too much leeway around how many times the events are retried. There is no way to persist the events until you flip over functions in your deploys. Depending on your volume you stand the risk of losing some events, and will need to put in place out of band mechanisms to retry.
+
+						It is a slightly better story with Streams, because you have some persistamce in the stream. However whether you are able to do a Canary deploy or do you need to do a blue-green flip is based on your implementation.
+
+						Irrespective of how you deploy, my recommendation has always been to orchestrate it via a pipeline. Watch metrics and manage rollbacks. Have out of band mechanisms to catch failures. 
+
 					</aside>
 				</section>
 				<section>
@@ -202,6 +218,10 @@
 					<img src="images/sharing.jpg" alt="Sharing" width="60%" height="60%">
 					<aside class="notes">
 						[Credit] https://commons.wikimedia.org/wiki/File:Life_is_Sharing_(8188824613).jpg [/Credit]
+						Another interesting problem to tackle is how do you split up you functions? If you are providing a CRUD API, do you write a CRUD function, or do you write seperate functions for Create, Read, Update, Delete etc? Presumably each of those have different scaling requirements. So if you have seperate functions, you are probably going to have to duplicate code. 
+
+						In those cases you have a a couple of choices to make. Duplicating code is generally a bad idea. You write shared private libraries like npm modules that are imported by different functions. Or you could encapsulate it into a shared service that you run and used by other services. You might not be able to run everything as a shared service. Both methods have their pros and cons. If you are using shared libraries, any updates you release have to be used by client and they have to be backward compatible, or you will end up maintaining multiple versions of the library. Similar problems exist with providing shared components as a service, but easier to maintain versions of API and deprecate them. You have more control. But with shared service, te client now have to make an extra hop across the network.
+
 					</aside>
 				</section>											
 				<section>
@@ -225,20 +245,26 @@
 					<img src="images/snyk-lambda.png" alt="Vulnerable Libraries" >
 					<aside class="notes">						
 						[Credit] https://snyk.io/docs/aws-lambda [/Credit]
+
+						So the platform takes care of the OS and patching and network isolation etc etc right. There is still the problem of all those imports and includes and requires, on the other end of which there is code written by someone you dont know! So when your pipeline bundles up that zip to deploy, it is your responsibility to make sure what you put in it is safe. Tools like Snyk, which is now interegated into github allw you to implement continuos security scanning in your repositories and in your pipelines. Snyk also have native integration into Lambda to scan for known vulnerabilities in your external libraries.
 					</aside>	
 				</section> 		
 				<section>
 					<img src="images/secret.jpg" alt="Scrabble Secret" >
 					<aside class="notes">		
 						[Credit] http://www.thebluediamondgallery.com/wooden-tile/s/secret.html [/Credit]				
-						Fetch from Parameter Store. At the very least encrypt with KMS in env variables.
+						With Lambda fucntions you can have secrets in Env vars, and they are encrypted by KMS. But it is not ideal. What if you have secrets that need to be shared across multiple functions? Also if you need to rotate your secrets, you need to redeploy your functions.
+
+						Also access control. Can the person who deploys functions have access to the secrets? Do all secrets required by  function have the same level of access control? When you are using Env vars, you cant have fine grained access control. 
+
+						Use SSM parameter store to store your configs and secrets. One considertion if you choose this path is that reaching out to Parameter Store is another API call your function will have to make. If you cannot afford that, then load your configs and secrets in a global context, so that your warm functions wont need to make that API call. But make sure you have a TTL set for expiry of those global variables.
 					</aside>	
 				</section> 	
 				<section>
 					<h4> Function boundary is your perimeter </h4>
 					<img src="images/function-boundaries.png" alt="Function Boundaries" >
 					<aside class="notes">						
-						Fine grained per function permissions. If you are running multiple versions of the function that require slightly different permissions, it gets complicated. You cannot tie a lambda version to an IAM policy version. 
+						In case of Lambda functions, each individual function is your security perimeter. The more functions you have and the more versions of functions you have the bigger the surface area you have to protect. Having all your functions bounded by one IAM policy is not the best. Ring fence each function with a locked down IAM policy. It gets a bit difficult with function versions, especially if two versions of a function need to use different IAM policies. I dont think that tis possible at the moment. 
 					</aside>	
 				</section> 	
 				<section>
@@ -246,6 +272,7 @@
 					<img src="images/ants-tearing-money.jpg" alt="Ants" width="70%" height="70%">					
 					<aside class="notes">						
 						[Credit] https://www.flickr.com/photos/gazeronly/8604672342 [/Credit]
+						Serverless platforms take care of scaling and capacity for you. But there are limits. There are soft limits and hard limits. We need to know about and care about where we are at in relation to limits. Within limits, serverless platforms make DoS attacks not so severe. But a sustained DoS attack can affect your service in a few ways. One, they can rack up a bill for you. And two they can hit other limits downstream and result in resource exhaustion. A simple example would be, if your DynamoDB read IOPS can be exhausted, even if you are not hitting you Lambda limits.
 					</aside>	
 				</section> 															
 				<section>
@@ -260,10 +287,10 @@
 					<div class="see-through">
 						<h4> Four Pillars </h4>
 						<ul>
+	          				<li> Log aggregation/analytics </li>							
 	          				<li> Monitoring </li>
 	          				<li> Alerting/Vizualization </li>
 	          				<li> Distributed systems tracing infrastructure </li>
-	          				<li> Log aggregation/analytics </li>
 	          			</ul>
 	          		</div>
 					<aside class="notes">						
@@ -281,19 +308,23 @@
 							https://pixabay.com/en/wood-logs-lumber-woodpile-firewood-1209632/
 							https://pixabay.com/en/table-rustic-wooden-wood-furniture-349678/
 						[/Credit]
-						Strucured logs. Dont use console.log.
+
+						For everyone sake in the world, please DO NOT use just console.log in your functions.  Logs used to be for humans to read. With the complex systems we are runing now, that is not true anymore. Write machine readable logs. Use some structured logging framework in you language of choice. Also Cloudwatch Logs, though a good fist place for your logs to land, is not super friendly when you want to search for something. So please please please move those logs to an external logging service like Elasticsearch service or Splunk or SumoLogic or others.
+
 					</aside>
 				</section>				
 				<section>
 					<img src="images/datadog-observability.png" alt="Datadog" width="110%" height="110%">
 					<aside class="notes">						
 						[Credit] https://www.datadoghq.com/blog/announcing-logs/ [/Credit]
+						The idea of waking up from a PagerDuty alert, and looking at the metric that breached our alarm threshold, looking at other relevant metrics, clicking through to the relevant logs around that time frame, and also being able to drill down to the tracing information and seeing exceptions is very powerful.
 					</aside>	
 				</section> 	
 				<section>
 					<img src="images/vizceral.png" alt="Netflix Vizceral" >
 					<aside class="notes">						
 						[Credit] https://medium.com/netflix-techblog/vizceral-open-source-acc0c32113fe [/Credit]
+						There are also tools like Vizceral/Hysterix by Netflix which they have built to give them a birds eye view of everything that is going on at an appropriate granularity and being able to drill down to specific parts of the architecture and see vizualisations of relevant metrics and information in a glance. Very powerful
 					</aside>	
 				</section> 		
 				<section>
@@ -303,11 +334,22 @@
 						[Credit] http://potus98.wdfiles.com/local--files/wiki:devopsdays2012/DevOpsDays-BluesBrothers-B.jpg  [/Credit]
 					</aside>	
 				</section> 					
-
 				<section>
 					<h2> Serverless first… </h2>
 					<h4> a loosely held strong opinion </h4>
-				</section>																							
+				</section>		
+				<section>
+					<h2> References </h2>
+					<ul>
+						<small>
+							<li><a href="https://github.com/cncf/wg-serverless/blob/master/whitepaper/cncf_serverless_whitepaper_v1.0.pdf ">CNCF Serverless whitepaper</a></li>
+							<li><a href="https://d1.awsstatic.com/whitepapers/architecture/AWS-Serverless-Applications-Lens.pdf">Serverless Application Lens</a></li>
+							<li><a href="https://medium.com/theburningmonk-com/all-my-posts-on-serverless-aws-lambda-43c17a147f91">The Burning Monk Blog posts</a></li>
+							<li><a href="https://medium.com/@copyconstruct/monitoring-and-observability-8417d1952e1c"> Monitoring and Observability - Cindy Sridharan </a></li>
+							<li><a href="https://www.infoq.com/articles/charity-majors-observability-failure"> Charity Majors on Observability and Understanding the Operational Ramifications of a System</a></li>
+						</small>
+					</ul>
+				</section>																					
 				<section>
 					<img src="images/namaste.jpg" alt="Namaste" width="400">
 					<h2><span> T  H  A  N  K  Y  O  U </span> </h2>
